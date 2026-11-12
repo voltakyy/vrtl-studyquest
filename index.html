@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>StudyQuest & VRTL Planner — iOS 18 Aesthetic Glassmorphic</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="ios-glass-theme">
+
+<!-- DYNAMIC ISLAND (iOS 18) -->
+<div class="dynamic-island-wrapper">
+  <div class="dynamic-island" id="dynamicIsland">
+    <div class="di-camera-hole"></div>
+    <div class="di-content-idle" id="diIdle">
+      <span class="di-pill-dot"></span>
+      <span class="di-text" id="diText">VRTL Quest · 10:28</span>
+    </div>
+    <div class="di-content-active hidden" id="diActive">
+      <span class="di-icon" id="diIcon">🍅</span>
+      <span class="di-timer-label" id="diTimer">25:00</span>
+      <span class="di-sound-wave"><span></span><span></span><span></span></span>
+    </div>
+  </div>
+</div>
+
+<!-- TOP STATUS BAR (TIME, WIFI, BATTERY, PROFILE) -->
+<div class="ios-notch-bar">
+  <div class="notch-time" id="notchClock">10:28</div>
+  <div class="notch-center-space"></div>
+  <div class="notch-icons">
+    <span class="notch-sig">📶</span>
+    <span class="notch-wifi">🛜</span>
+    <span class="notch-batt">🔋</span>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app" class="app">
+
+  <!-- TOP BRAND & HEADER (VRTL HEART + NOTIFICATION + BUNNY) -->
+  <header class="vrtl-header">
+    <div class="vrtl-logo-row">
+      <div class="vrtl-logo">
+        <span class="logo-box">🌸</span>
+        <span class="logo-text">VRTL</span>
+        <span class="logo-heart">🩷</span>
+      </div>
+      <div class="vrtl-header-right">
+        <!-- Coin & Gem Pills -->
+        <div class="header-pill gold" title="Koin Belajar">🪙 <span id="topCoins">150</span></div>
+        <div class="header-pill purple" title="Gems Spesial">💎 <span id="topGems">5</span></div>
+        <button class="notif-bell-btn" onclick="openNotif()">
+          🔔<span class="notif-badge">1</span>
+        </button>
+        <div class="bunny-avatar-btn" onclick="goPage('profile')">
+          <span id="headerAvatar">🐰</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUB-NAVIGATION CAPSULE BAR (Today, Planner, Goals, Finances, Social, Map) -->
+    <div class="vrtl-glass-nav-capsule">
+      <button class="capsule-nav-item" onclick="goPage('dashboard', this)">
+        <span class="cni-icon">📅</span>
+        <span class="cni-text">Today</span>
+      </button>
+      <button class="capsule-nav-item active" onclick="goPage('planner', this)">
+        <span class="cni-icon">📖</span>
+        <span class="cni-text">Planner</span>
+      </button>
+      <button class="capsule-nav-item" onclick="goPage('focus', this)">
+        <span class="cni-icon">⏱️</span>
+        <span class="cni-text">Focus</span>
+      </button>
+      <button class="capsule-nav-item" onclick="goPage('quests', this)">
+        <span class="cni-icon">⭐</span>
+        <span class="cni-text">Goals</span>
+      </button>
+      <button class="capsule-nav-item" onclick="goPage('progress', this)">
+        <span class="cni-icon">📊</span>
+        <span class="cni-text">Stats</span>
+      </button>
+      <button class="capsule-nav-item" onclick="goPage('shop', this)">
+        <span class="cni-icon">🛍️</span>
+        <span class="cni-text">Store</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- XP BAR STRIP -->
+  <div class="xp-strip">
+    <div class="xp-label">
+      <span class="xp-tag">LEVEL <span id="statusLevel">1</span> · <span id="statusTitle">Pelajar</span></span>
+      <span id="xpText">0 / 500 XP</span>
+    </div>
+    <div class="xp-track">
+      <div class="xp-fill" id="xpFill"></div>
+    </div>
+  </div>
+
+  <!-- ============ PAGE SCREENS CONTAINER ============ -->
+  <main class="pages">
+
+    <!-- PAGE 1: PLANNER (PERSIS GAMBAR USER) -->
+    <section class="page active" id="page-planner">
+      <div class="page-scroll">
+
+        <!-- Filter Sub-Tabs + Date Picker Pill -->
+        <div class="planner-subbar-row">
+          <div class="planner-filter-pills">
+            <button class="pf-pill active" onclick="filterPlannerTab('Daily', this)">Daily</button>
+            <button class="pf-pill" onclick="filterPlannerTab('Weekly', this)">Weekly</button>
+            <button class="pf-pill" onclick="filterPlannerTab('Monthly', this)">Monthly</button>
+            <button class="pf-pill" onclick="filterPlannerTab('Notes', this)">Notes</button>
+          </div>
+          <div class="date-selector-pill">
+            <button class="dsp-nav" onclick="changeDate(-1)">‹</button>
+            <span class="dsp-label" id="currentDateLabel">📅 Nov 12, 2026</span>
+            <button class="dsp-nav" onclick="changeDate(1)">›</button>
+          </div>
+        </div>
+
+        <!-- 2-COLUMN BENTO GRID WIDGETS -->
+        <div class="planner-bento-grid">
+
+          <!-- COLUMN LEFT -->
+          <div class="bento-col-left">
+
+            <!-- WIDGET 1: TODAY'S GOALS (PINK GLASS) -->
+            <div class="bento-card card-pink-glass">
+              <div class="bc-header">
+                <div class="bc-title-group">
+                  <span class="bc-icon-pink">🎯</span>
+                  <h3 class="bc-title">Today's Goals</h3>
+                </div>
+                <button class="bc-add-btn" onclick="promptAddGoal()">+</button>
+              </div>
+
+              <div class="goals-list" id="goalsList">
+                <!-- Injected via JS -->
+              </div>
+
+              <!-- Quick inline add input -->
+              <div class="inline-add-row">
+                <button class="inline-add-btn" onclick="submitQuickGoal()">+</button>
+                <input type="text" id="inputNewGoal" class="inline-add-input" placeholder="Add goal..." onkeydown="handleGoalKey(event)"/>
+                <span class="bc-heart-icon">🩷</span>
+              </div>
+            </div>
+
+            <!-- WIDGET 2: TO DO LIST (LAVENDER GLASS) -->
+            <div class="bento-card card-lavender-glass">
+              <div class="bc-header">
+                <div class="bc-title-group">
+                  <span class="bc-icon-lavender">☑️</span>
+                  <h3 class="bc-title">To Do List</h3>
+                </div>
+                <button class="bc-add-btn" onclick="promptAddTask()">+</button>
+              </div>
+
+              <div class="todo-list" id="todoList">
+                <!-- Injected via JS -->
+              </div>
+
+              <!-- Quick inline add task -->
+              <div class="inline-add-row">
+                <button class="inline-add-btn" onclick="submitQuickTask()">+</button>
+                <input type="text" id="inputNewTask" class="inline-add-input" placeholder="Add task..." onkeydown="handleTaskKey(event)"/>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- COLUMN RIGHT -->
+          <div class="bento-col-right">
+
+            <!-- WIDGET 3: MOOD TRACKER (PURPLE GLASS) -->
+            <div class="bento-card card-purple-glass">
+              <div class="bc-header">
+                <div class="bc-title-group">
+                  <span class="bc-icon-purple">😊</span>
+                  <h3 class="bc-title">Mood</h3>
+                </div>
+                <span class="bc-arrow-btn">›</span>
+              </div>
+
+              <div class="mood-selector-row">
+                <button class="mood-btn active" data-mood="Happy" onclick="selectMood(this, 'Happy', '🌸 Senang & Bersyukur! +10 XP')">
+                  <span class="mood-emoji">😊</span>
+                  <span class="mood-lbl">Happy</span>
+                </button>
+                <button class="mood-btn" data-mood="Neutral" onclick="selectMood(this, 'Neutral', '🌿 Santai & Fokus! +10 XP')">
+                  <span class="mood-emoji">😐</span>
+                  <span class="mood-lbl">Chill</span>
+                </button>
+                <button class="mood-btn" data-mood="Sleepy" onclick="selectMood(this, 'Sleepy', '😴 Jangan lupa istirahat! +10 XP')">
+                  <span class="mood-emoji">😴</span>
+                  <span class="mood-lbl">Tired</span>
+                </button>
+                <button class="mood-btn" data-mood="Cool" onclick="selectMood(this, 'Cool', '😎 Mode Juara! +10 XP')">
+                  <span class="mood-emoji">😎</span>
+                  <span class="mood-lbl">Cool</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- WIDGET 4: PRIORITY (MINT/LIME GLASS) -->
+            <div class="bento-card card-mint-glass">
+              <div class="bc-header">
+                <div class="bc-title-group">
+                  <span class="bc-icon-mint">⭐</span>
+                  <h3 class="bc-title">Priority</h3>
+                </div>
+                <button class="bc-add-btn" onclick="promptAddPriority()">+</button>
+              </div>
+
+              <div class="priority-list" id="priorityList">
+                <!-- Injected via JS -->
+              </div>
+
+              <div class="inline-add-row">
+                <button class="inline-add-btn" onclick="submitQuickPriority()">+</button>
+                <input type="text" id="inputNewPriority" class="inline-add-input" placeholder="Add priority..." onkeydown="handlePriorityKey(event)"/>
+              </div>
+            </div>
+
+            <!-- WIDGET 5: APPOINTMENTS / SCHEDULE (PEACH/CREAM GLASS) -->
+            <div class="bento-card card-peach-glass">
+              <div class="bc-header">
+                <div class="bc-title-group">
+                  <span class="bc-icon-peach">📅</span>
+                  <h3 class="bc-title">Appointments</h3>
+                </div>
+                <button class="bc-add-btn" onclick="promptAddAppointment()">+</button>
+              </div>
+
+              <div class="appointments-list" id="appointmentsList">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- FULL-WIDTH WIDGET 6: NOTES (SKY BLUE GLASS + CUTE BUNNY) -->
+        <div class="bento-card card-skyblue-glass notes-widget">
+          <div class="bc-header">
+            <div class="bc-title-group">
+              <span class="bc-icon-blue">📝</span>
+              <h3 class="bc-title">Notes & Thoughts</h3>
+            </div>
+            <button class="bc-add-btn" onclick="saveNoteManual()">💾</button>
+          </div>
+          <textarea id="plannerNoteArea" class="notes-textarea" placeholder="Tulis catatan, ide, atau pengingat penting hari ini..." rows="2" oninput="autoSaveNote()"></textarea>
+          <div class="notes-bunny-sticker">
+            <span class="nb-heart">🩷</span>
+            <span class="nb-bunny">🐰</span>
+          </div>
+        </div>
+
+        <div class="page-spacer"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: TODAY (DASHBOARD) -->
+    <section class="page" id="page-dashboard">
+      <div class="page-scroll">
+
+        <!-- Cute Mascot Banner (StudyMate Style) -->
+        <div class="mascot-card">
+          <div class="mascot-left">
+            <span class="mascot-pill">STUDY COMPANION</span>
+            <h2 class="mascot-greeting" id="heroGreeting">Hai, Pelajar Hebat! 👋</h2>
+            <p class="mascot-motto" id="mascotMotto">"Discipline today, success tomorrow. Small steps bring big results! 🐾"</p>
+            <div class="mascot-action-row">
+              <button class="pill-btn primary" onclick="goPage('focus')">⏱️ Mulai Fokus</button>
+              <button class="pill-btn secondary" onclick="interactMascot()">🐰 Sapa Mascot (+XP)</button>
+            </div>
+          </div>
+          <div class="mascot-avatar-wrap" onclick="interactMascot()">
+            <div class="mascot-pet-bubble" id="mascotBubble">Semangat belajarnya ya! ✨</div>
+            <div class="mascot-pet-emoji" id="mascotEmoji">🐰</div>
+          </div>
+        </div>
+
+        <!-- Daily Goal Tracker Card -->
+        <div class="card goal-card">
+          <div class="goal-header">
+            <div>
+              <span class="card-caption">DAILY TARGET</span>
+              <h3 class="card-title">Target XP Hari Ini</h3>
+            </div>
+            <span class="goal-number-badge"><span id="dailyXP">0</span> / <span id="dailyTarget">500</span> XP</span>
+          </div>
+          <div class="progress-bar-lg">
+            <div class="progress-bar-fill" id="dailyXPFill"></div>
+          </div>
+          <div class="goal-footer">
+            <span id="dailyXPMotivation">Yuk selesaikan checklist di Planner!</span>
+            <span class="goal-pct-text" id="dailyXPPct">0%</span>
+          </div>
+        </div>
+
+        <!-- Today's Mission Card -->
+        <div class="section-header-row">
+          <h3 class="section-title">⚔️ Misi Harian</h3>
+          <span class="badge-accent" id="missionProg">0/3</span>
+        </div>
+        <div class="card mission-box" id="missionCard">
+          <div class="mission-top">
+            <div class="mission-name-group">
+              <h4 id="missionTitle">Sesi Belajar Intensif</h4>
+              <p class="card-sub">Selesaikan ketiga misi untuk bonus koin & XP berlimpah!</p>
+            </div>
+            <span class="mission-emoji" id="missionBadge">🎯</span>
+          </div>
+          <div class="mission-tasks" id="missionTasks"></div>
+          <div class="progress-bar-sm" style="margin-top:12px">
+            <div class="progress-bar-fill" id="missionFill"></div>
+          </div>
+        </div>
+
+        <!-- Life Stats At-A-Glance -->
+        <div class="section-header-row">
+          <h3 class="section-title">📊 Life Attributes</h3>
+          <button class="text-link" onclick="goPage('profile')">Detail ➔</button>
+        </div>
+        <div class="card">
+          <div class="life-stats-grid" id="lifeStatsGrid"></div>
+        </div>
+
+        <!-- Quick XP Actions -->
+        <div class="section-header-row">
+          <h3 class="section-title">⭐ Aksi Cepat Produktif</h3>
+        </div>
+        <div class="xp-actions-grid" id="xpActionsGrid"></div>
+
+        <div class="page-spacer"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 3: FOCUS TIMER (POMODORO) -->
+    <section class="page" id="page-focus">
+      <div class="page-scroll">
+        <div class="page-header text-center">
+          <span class="ob-tag">FOCUS COMPANION</span>
+          <h2 class="page-h2">Focus Timer</h2>
+          <p class="page-sub">Belajar tanpa distraksi. Dapatkan reward XP & Koin otomatis!</p>
+        </div>
+
+        <!-- Mode Toggle Tabs -->
+        <div class="focus-mode-toggle">
+          <button class="fmt-btn active" id="fmode-25" onclick="setFocusMode(25, 'Pomodoro')">Pomodoro (25m)</button>
+          <button class="fmt-btn" id="fmode-5" onclick="setFocusMode(5, 'Short Break')">Istirahat (5m)</button>
+          <button class="fmt-btn" id="fmode-50" onclick="setFocusMode(50, 'Deep Work')">Deep Work (50m)</button>
+        </div>
+
+        <!-- Circular SVG Timer -->
+        <div class="timer-display-card">
+          <div class="timer-circle-wrap">
+            <svg class="timer-svg" viewBox="0 0 240 240">
+              <circle class="timer-track" cx="120" cy="120" r="100"/>
+              <circle class="timer-progress" id="timerProgressCircle" cx="120" cy="120" r="100"/>
+            </svg>
+            <div class="timer-inner-content">
+              <div class="timer-pet-icon" id="timerPetAvatar">🌸</div>
+              <div class="timer-digits" id="timerDigits">25:00</div>
+              <div class="timer-mode-caption" id="timerModeCaption">Fokus Pada Targetmu!</div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="timer-controls">
+            <button class="timer-btn-reset" onclick="resetFocusTimer()" title="Reset Timer">↺</button>
+            <button class="timer-btn-main" id="timerMainBtn" onclick="toggleFocusTimer()">Mulai Fokus</button>
+            <button class="timer-btn-sound" id="ambientToggleBtn" onclick="toggleAmbientSound()" title="Ambient Sound">🎵</button>
+          </div>
+          <div class="ambient-status-text" id="ambientStatus">Sound: Senyap</div>
+        </div>
+
+        <!-- Focus Stats Mini Row -->
+        <div class="card focus-summary-row">
+          <div class="fs-item">
+            <span class="fs-val" id="todayFocusMins">0m</span>
+            <span class="fs-lbl">Waktu Fokus Hari Ini</span>
+          </div>
+          <div class="fs-divider"></div>
+          <div class="fs-item">
+            <span class="fs-val" id="todayFocusSessions">0</span>
+            <span class="fs-lbl">Sesi Selesai</span>
+          </div>
+          <div class="fs-divider"></div>
+          <div class="fs-item">
+            <span class="fs-val" id="todayFocusXP">+0 XP</span>
+            <span class="fs-lbl">Reward Diperoleh</span>
+          </div>
+        </div>
+
+        <div class="page-spacer"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: QUEST BOARD -->
+    <section class="page" id="page-quests">
+      <div class="page-scroll">
+        <div class="page-header">
+          <span class="ob-tag">QUESTS & GOALS</span>
+          <h2 class="page-h2">Quest Board</h2>
+          <p class="page-sub">Tuntaskan misi gamifikasi dan klaim hadiah anti-cheat!</p>
+        </div>
+
+        <div class="section-header-row">
+          <h3 class="section-title">🌅 Daily Quests</h3>
+        </div>
+        <div class="quest-list" id="dailyQuestList"></div>
+
+        <div class="section-header-row" style="margin-top:20px">
+          <h3 class="section-title">📅 Weekly Challenges</h3>
+        </div>
+        <div class="quest-list" id="weeklyQuestList"></div>
+
+        <div class="section-header-row" style="margin-top:20px">
+          <h3 class="section-title">✨ Special Milestones</h3>
+        </div>
+        <div class="quest-list" id="specialQuestList"></div>
+
+        <div class="page-spacer"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 5: STATS & ANALYTICS -->
+    <section class="page" id="page-progress">
+      <div class="page-scroll">
+        <div class="page-header">
+          <span class="ob-tag">ANALYTICS</span>
+          <h2 class="page-h2">Progress Belajar</h2>
+          <p class="page-sub">Pantau konsistensi dan jam belajarmu sepanjang minggu.</p>
+        </div>
+
+        <!-- Weekly Study Time Chart Card -->
+        <div class="card analytics-card">
+          <div class="analytics-header">
+            <div>
+              <span class="card-caption">TOTAL WAKTU BELAJAR</span>
+              <h3 class="analytics-big-time" id="analyticsTotalTime">4h 30m</h3>
+            </div>
+            <span class="badge-accent">Minggu Ini</span>
+          </div>
+
+          <!-- 7-Day Bar Chart -->
+          <div class="weekly-bar-chart" id="weeklyBarChart"></div>
+
+          <div class="analytics-stat-pill-row">
+            <div class="stat-box-sm">
+              <span class="sb-val" id="anTasksDone">0</span>
+              <span class="sb-lbl">Tugas Selesai</span>
+            </div>
+            <div class="stat-box-sm">
+              <span class="sb-val" id="anSessionsDone">0</span>
+              <span class="sb-lbl">Sesi Pomodoro</span>
+            </div>
+            <div class="stat-box-sm">
+              <span class="sb-val" id="anStreakDays">1</span>
+              <span class="sb-lbl">Hari Streak</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RPG Adventure Map -->
+        <div class="section-header-row">
+          <h3 class="section-title">🗺️ RPG Adventure Map</h3>
+        </div>
+        <div class="card">
+          <div class="map-container" id="mapContainer"></div>
+        </div>
+
+        <!-- Boss Battles -->
+        <div class="section-header-row" style="margin-top:20px">
+          <h3 class="section-title">👹 Boss Battles</h3>
+        </div>
+        <div class="boss-list" id="bossListMap"></div>
+
+        <div class="page-spacer"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 6: SHOP -->
+    <section class="page" id="page-shop">
+      <div class="page-scroll">
+        <div class="page-header">
+          <span class="ob-tag">CLOUD STORE</span>
+          <h2 class="page-h2">Store & Rewards</h2>
+          <p class="page-sub">Gunakan koin hasil belajarmu untuk membeli item dan reward nyata!</p>
+        </div>
+
+        <div class="wallet-balance-card">
+          <div class="w-item gold">
+            <span class="w-icon">🪙</span>
+            <div>
+              <span class="w-val" id="shopCoins">0</span>
+              <span class="w-lbl">Koin Belajar</span>
+            </div>
+          </div>
+          <div class="w-divider"></div>
+          <div class="w-item purple">
+            <span class="w-icon">💎</span>
+            <div>
+              <span class="w-val" id="shopGems">0</span>
+              <span class="w-lbl">Gems Spesial</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-header-row">
+          <h3 class="section-title">⚡ Item Booster</h3>
+        </div>
+        <div class="shop-grid" id="shopPowerups"></div>
+
+        <div class="section-header-row" style="margin-top:20px">
+          <h3 class="section-title">🎨 Skin Karakter</h3>
+        </div>
+        <div class="shop-grid" id="shopSkins"></div>
+
+        <div class="section-header-row" style="margin-top:20px">
+          <h3 class="section-title">🎁 Hadiah Nyata (Self-Reward)</h3>
+        </div>
+        <div class="real-rewards-list" id="realRewardsList"></div>
+
+        <div class="page-spacer"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 7: PROFILE & SETTINGS -->
+    <section class="page" id="page-profile">
+      <div class="page-scroll">
+        <div class="card profile-header-card">
+          <div class="profile-avatar-outer">
+            <span class="profile-avatar-emoji" id="profileAvatar">🐰</span>
+          </div>
+          <h2 class="profile-name" id="profileName">Aiko</h2>
+          <span class="profile-title" id="profileTitle">Pelajar Teladan</span>
+          <span class="profile-level-badge">Level <span id="profileLevel">1</span></span>
+          <p class="profile-motto">"Stay focused. Stay consistent. Make your dreams your reality."</p>
+          <button class="pill-btn primary small" onclick="openEditProfile()" style="margin-top:8px">✏️ Edit Profil</button>
+        </div>
+
+        <div class="section-header-row">
+          <h3 class="section-title">📊 Rangkuman Statistik</h3>
+        </div>
+        <div class="profile-stats-grid" id="profileStatsGrid"></div>
+
+        <div class="section-header-row" style="margin-top:20px">
+          <h3 class="section-title">🏅 Koleksi Lencana</h3>
+        </div>
+        <div class="achievements-grid" id="achievementsGrid"></div>
+
+        <div class="section-header-row" style="margin-top:24px">
+          <h3 class="section-title">⚙️ Pengaturan</h3>
+        </div>
+        <div class="card settings-box">
+          <div class="setting-row">
+            <span>🔔 Pengingat Belajar</span>
+            <label class="toggle"><input type="checkbox" id="settingNotif" checked/><span class="slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <span>🔊 Efek Suara (Web Audio)</span>
+            <label class="toggle"><input type="checkbox" id="settingSound" checked/><span class="slider"></span></label>
+          </div>
+        </div>
+
+        <button class="danger-btn" onclick="confirmReset()">🗑️ Reset Semua Data Belajar</button>
+
+        <div class="page-spacer"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ BOTTOM GLASS DOCK (PERSIS DOCK BAWAH GAMBAR) ============ -->
+  <nav class="vrtl-bottom-dock">
+    <div class="vrtl-dock-capsule">
+      <button class="vrtl-dock-item" onclick="goPage('dashboard', this)" id="nav-dashboard">
+        <span class="vdi-icon">🏠</span>
+        <span class="vdi-text">Home</span>
+      </button>
+
+      <button class="vrtl-dock-item" onclick="goPage('focus', this)" id="nav-focus">
+        <span class="vdi-icon">📞</span>
+        <span class="vdi-text">Focus</span>
+      </button>
+
+      <button class="vrtl-dock-item" onclick="goPage('quests', this)" id="nav-quests">
+        <span class="vdi-icon">👤</span>
+        <span class="vdi-text">Goals</span>
+      </button>
+
+      <!-- HIGHLIGHTED ACTIVE PINK PLANNER BUTTON -->
+      <button class="vrtl-dock-item active-glow" onclick="goPage('planner', this)" id="nav-planner">
+        <div class="vdi-glow-box">
+          <span class="vdi-icon">📖</span>
+        </div>
+        <span class="vdi-text">Planner</span>
+      </button>
+
+      <button class="vrtl-dock-item" onclick="goPage('shop', this)" id="nav-shop">
+        <span class="vdi-icon">🛍️</span>
+        <span class="vdi-text">Cloud Store</span>
+      </button>
+
+      <button class="vrtl-dock-item" onclick="goPage('profile', this)" id="nav-profile">
+        <span class="vdi-icon">⚙️</span>
+        <span class="vdi-text">Settings</span>
+      </button>
+    </div>
+  </nav>
+
+</div>
+
+<!-- MODALS -->
+
+<!-- Level Up Modal -->
+<div class="modal-overlay hidden" id="levelUpModal">
+  <div class="modal-card level-up-modal">
+    <div class="level-up-anim">🌟</div>
+    <div class="level-up-banner">LEVEL UP!</div>
+    <div class="level-up-num" id="levelUpNum">Level 2</div>
+    <div class="level-up-title" id="levelUpTitleEl">Pelajar Muda</div>
+    <div class="level-up-quote">"The higher your level, the stronger your mind becomes."</div>
+    <div class="level-up-rewards" id="levelUpRewards"></div>
+    <button class="modal-btn primary" onclick="closeLevelUp()">🎉 Lanjutkan Belajar!</button>
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal-overlay hidden" id="editProfileModal">
+  <div class="modal-card">
+    <h2>✏️ Edit Profil & Avatar</h2>
+    <div class="form-group">
+      <label>Nama Kamu</label>
+      <input type="text" id="editName" class="form-input" maxlength="20"/>
+    </div>
+    <div class="form-group">
+      <label>Pilih Avatar / Companion</label>
+      <div class="avatar-picker" id="avatarPicker"></div>
+    </div>
+    <div class="form-group">
+      <label>Target XP Harian</label>
+      <select id="editTarget" class="form-input">
+        <option value="250">250 XP — Santai</option>
+        <option value="500">500 XP — Normal</option>
+        <option value="800">800 XP — Ambisius</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" onclick="closeModal('editProfileModal')">Batal</button>
+      <button class="modal-btn primary" onclick="saveProfile()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast & Particle Container -->
+<div class="toast-container" id="toastContainer"></div>
+<div class="particle-container" id="particleContainer"></div>
+
+<script src="game.js"></script>
+</body>
+</html>
